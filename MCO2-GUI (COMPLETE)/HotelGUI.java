@@ -240,23 +240,8 @@ public class HotelGUI {
             Hotel hotel = controller.getHotelByName(selectedHotelName); // Retrieve the selected hotel object
             if (hotel != null) { // Check if the hotel object is valid
     
-                // Prompt the user to enter a guest name to check for reservations
-                String guestName = JOptionPane.showInputDialog(null, "Enter the guest name to check for reservation:");
-                if (guestName != null && !guestName.trim().isEmpty()) { // Check if a valid name is entered
-                    Reservation matchingReservation = controller.findReservationByGuestName(hotel, guestName); // Find reservation by guest name
-                    if (matchingReservation != null) {
-                        // Show details of the matching reservation
-                        String reservationDetails = matchingReservation.getDetails(); // Assuming getDetails() returns formatted string of reservation details
-                        JOptionPane.showMessageDialog(null, reservationDetails, "Reservation Details", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No reservation exists under the name: " + guestName); // Show message if no reservation exists
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Please enter a valid name."); // Show message if no valid name is entered
-                }
-    
-                // Continue with displaying hotel information
-                JDialog dialog = new JDialog(); // Create a dialog to display hotel information
+                // Create a dialog to display hotel information
+                JDialog dialog = new JDialog();
                 dialog.setTitle("View Hotel Information");
                 dialog.setSize(300, 200);
                 dialog.setLayout(new GridLayout(3, 1));
@@ -277,7 +262,22 @@ public class HotelGUI {
                 JButton lowLevelButton = new JButton("Low-level information"); // Create and add a button to display low-level information
                 lowLevelButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        viewLowLevelInfo(hotel); // Call method to view low-level information and close the dialog
+                        // Prompt the user to enter a guest name to check for reservations
+                        String guestName = JOptionPane.showInputDialog(null, "Enter the guest name to check for reservation:");
+                        if (guestName != null && !guestName.trim().isEmpty()) { // Check if a valid name is entered
+                            Reservation matchingReservation = controller.findReservationByGuestName(hotel, guestName); // Find reservation by guest name
+                            if (matchingReservation != null) {
+                                // Show details of the matching reservation
+                                String reservationDetails = matchingReservation.getDetails(); // Assuming getDetails() returns formatted string of reservation details
+                                JOptionPane.showMessageDialog(dialog, reservationDetails, "Reservation Details", JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(dialog, "No reservation exists under the name: " + guestName); // Show message if no reservation exists
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(dialog, "Please enter a valid name."); // Show message if no valid name is entered
+                        }
+    
+                        viewLowLevelInfo(hotel); // Call method to view low-level information
                         dialog.dispose();
                     }
                 });
@@ -291,6 +291,7 @@ public class HotelGUI {
             }
         }
     }
+    
     
     
     
